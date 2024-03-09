@@ -1,0 +1,23 @@
+---
+import SocialPill from "./SocialPill.astro";
+import MailIcon from './icons/Mail.astro';
+---
+
+<section class="flex flex-col md:flex-row gap-10 md:gap-40 justify-center items-center mt-12">
+  <img src="/aboutme.png" class="rounded-full size-64 order-1 md:order-1" />
+  <div class="[&>p]:mb-4 [&>p>strong]:text-black/90 [&>p>strong]:font-semibold text-pretty order-2 md:order-1 mt-4 md:mt-16">
+    <p>
+      We are <strong>TryAgain</strong>, a tech-savvy enterprise at the forefront of
+      <strong>mobile and web application development</strong>. Specializing in crafting innovative solutions for both
+      <strong>Android and iOS platforms</strong>, we bring ideas to life through our apps available on the
+      <strong>App Store and Google Play Store</strong>. Driven by creativity and a passion for technology, we strive to deliver exceptional digital experiences that redefine the norms of user engagement and functionality. Join us on a journey of
+      <strong>technological exploration and innovation</strong>!
+    </p>
+    <nav class="flex gap-2 mt-8 md:mt-8 flex-wrap justify-center ">
+      <SocialPill href="mailto:hello@tryagain.app">
+        <MailIcon class="size-4 md:size-6" />
+        hello@tryagain.app
+      </SocialPill>
+    </nav>
+  </div>
+</section>
