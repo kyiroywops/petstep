@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970533232003",
+    "project_id": "amclub-6b2c4",
+    "storage_bucket": "amclub-6b2c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970533232003:android:b20345179c095e87022ab6",
+        "android_client_info": {
+          "package_name": "com.example.amclub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACbb1-7cv6IOwolLdEoYfWvSginWr-jq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

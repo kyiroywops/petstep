@@ -1,0 +1,345 @@
+[
+  {
+    "name": "Squats",
+    "translations": {
+      "es": "Sentadillas"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Flat Bench Press",
+    "translations": {
+      "es": "Press de Banca Plano"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Pull-Ups",
+    "translations": {
+      "es": "Dominadas"
+    },
+    "icon": "espalda1.png"
+  },
+  {
+    "name": "Biceps Curl",
+    "translations": {
+      "es": "Curl de Bíceps"
+    },
+    "icon": "biceps1.png"
+  },
+  {
+    "name": "Lateral Raises",
+    "translations": {
+      "es": "Elevaciones Laterales"
+    },
+    "icon": "hombros1.png"
+  },
+  {
+    "name": "Military Press",
+    "translations": {
+      "es": "Press Militar"
+    },
+    "icon": "hombros1.png"
+  },
+  {
+    "name": "Incline Chest Press",
+    "translations": {
+      "es": "Press de Pecho Inclinado"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Parallel Bar Dips",
+    "translations": {
+      "es": "Fondos en Paralelas"
+    },
+    "icon": "biceps1.png"
+  },
+  {
+    "name": "Rowing",
+    "translations": {
+      "es": "Remo"
+    },
+    "icon": "espalda1.png"
+  },
+  {
+    "name": "Leg Press",
+    "translations": {
+      "es": "Prensa de Piernas"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Planks",
+    "translations": {
+      "es": "Planchas"
+    },
+    "icon": "espalda1.png"
+  },
+  {
+    "name": "Lunges",
+    "translations": {
+      "es": "Zancadas"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Deadlift",
+    "translations": {
+      "es": "Peso Muerto"
+    },
+    "icon": "espalda1.png"
+  },
+  {
+    "name": "Arnold Press",
+    "translations": {
+      "es": "Press Arnold"
+    },
+    "icon": "hombros1.png"
+  },
+  {
+    "name": "Tricep Pushdowns",
+    "translations": {
+      "es": "Polea Tríceps"
+    },
+    "icon": "biceps1.png"
+  },
+  {
+    "name": "Hip Thrust",
+    "translations": {
+      "es": "Empuje de Caderas"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Pullover",
+    "translations": {
+      "es": "Pullover"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Face Pull",
+    "translations": {
+      "es": "Face Pull"
+    },
+    "icon": "espalda1.png"
+  },
+  {
+    "name": "Hammer Curl",
+    "translations": {
+      "es": "Curl Martillo"
+    },
+    "icon": "biceps1.png"
+  },
+  {
+    "name": "Calf Raises",
+    "translations": {
+      "es": "Elevaciones de Gemelo"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Flyes",
+    "translations": {
+      "es": "Aperturas"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Shrug",
+    "translations": {
+      "es": "Encogimientos"
+    },
+    "icon": "hombros1.png"
+  },
+  {
+    "name": "Quad Extension",
+    "translations": {
+      "es": "Extensión de Cuádriceps"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Leg Curl",
+    "translations": {
+      "es": "Curl de Piernas"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Crunches",
+    "translations": {
+      "es": "Crunches"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Russian Twists",
+    "translations": {
+      "es": "Giros Rusos"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Mountain Climbers",
+    "translations": {
+      "es": "Escaladores"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Box Jumps",
+    "translations": {
+      "es": "Saltos al Cajón"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Burpees",
+    "translations": {
+      "es": "Burpees"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Push-Ups",
+    "translations": {
+      "es": "Flexiones de Brazos"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Rowing Machine",
+    "translations": {
+      "es": "Máquina de Remo"
+    },
+    "icon": "espalda1.png"
+  },
+  {
+    "name": "Tricep Kickbacks",
+    "translations": {
+      "es": "Patada de Tríceps"
+    },
+    "icon": "espalda1.png"
+  },
+  {
+    "name": "Concentration Curl",
+    "translations": {
+      "es": "Curl de Concentración"
+    },
+    "icon": "biceps1.png"
+  },
+  {
+    "name": "Front Raises",
+    "translations": {
+      "es": "Elevaciones Frontales"
+    },
+    "icon": "hombros1.png"
+  },
+  {
+    "name": "Bulgarian Squats",
+    "translations": {
+      "es": "Sentadillas Búlgaras"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Hip Abductions",
+    "translations": {
+      "es": "Abducciones de Cadera"
+    },
+    "icon": "pecho1.png"
+  },
+  {
+    "name": "Hip Raises",
+    "translations": {
+      "es": "Elevaciones de Cadera"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Superman Exercise",
+    "translations": {
+      "es": "Ejercicio Superman"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Back Extension",
+    "translations": {
+      "es": "Extensión de Espalda"
+    },
+    "icon": "espalda1.png"
+  },
+  {
+    "name": "Romanian Deadlift",
+    "translations": {
+      "es": "Peso Muerto Rumano"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Knee-to-Chest Jump",
+    "translations": {
+      "es": "Salto Rodilla al Pecho"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Sumo Squat",
+    "translations": {
+      "es": "Sentadilla Sumo"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Side Plank",
+    "translations": {
+      "es": "Plancha Lateral"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Jumping Jacks",
+    "translations": {
+      "es": "Saltos de Tijera"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Jump Squat",
+    "translations": {
+      "es": "Sentadilla con Salto"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Vertical Scissor Kicks",
+    "translations": {
+      "es": "Patadas de Tijera Verticales"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "High Knees Running in Place",
+    "translations": {
+      "es": "Correr en el Sitio con Rodillas Altas"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Alternating Ankle Touch",
+    "translations": {
+      "es": "Toques al Tobillo Alternos"
+    },
+    "icon": "piernas1.png"
+  },
+  {
+    "name": "Pull Downs",
+    "translations": {
+      "es": "Polea al Pecho"
+    },
+    "icon": "espalda1.png"
+  }
+]
