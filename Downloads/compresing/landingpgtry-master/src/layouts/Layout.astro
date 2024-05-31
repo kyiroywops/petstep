@@ -1,0 +1,95 @@
+---
+import "@fontsource-variable/onest"
+
+import Header from "../components/Header.astro"
+import Footer from "../components/Footer.astro"
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { description, title } = Astro.props
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+
+  <body class="relative text-black bg-white">
+    <div class="absolute top-0 z-[-2] min-h-screen w-full bg-white bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+    
+
+    </div>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light dark;
+  }
+
+  html {
+    font-family: "Onest Variable", system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    color: rgba(17, 17, 17, 0.9);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overscroll-behavior: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  @keyframes slideRight {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-100% - 100px)); }
+}
+
+@-webkit-keyframes slideRight {
+  0% { -webkit-transform: translateX(0); }
+  100% { -webkit-transform: translateX(calc(-100% - 100px)); }
+}
+
+.app-icons-container {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.app-icon {
+  width: 100px; /* Ancho del ícono */
+  height: 100px; /* Alto del ícono */
+  -webkit-animation: slideRight 40s linear infinite;
+  animation: slideRight 40s linear infinite;
+  animation-delay: -20s;
+  -webkit-animation-delay: -20s;
+  object-fit: contain; /* Mantiene la proporción sin distorsión */
+  border-radius: 20px; /* Esquinas redondeadas */
+  margin: 0 15px; /* espacio horizontal entre íconos */
+}
+
+</style>

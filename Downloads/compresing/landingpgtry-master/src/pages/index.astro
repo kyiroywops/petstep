@@ -1,0 +1,86 @@
+---
+import Layout from "@/layouts/Layout.astro"
+
+import AboutMe from "@/components/AboutMe.astro"
+import Badge from "@/components/Badge.astro"
+import SectionContainer from "@/components/SectionContainer.astro"
+---
+
+<Layout
+  title="TryAgain - Innovating in App Development for Android & iOS"
+  description="Join TryAgain, where ideas transform into cutting-edge apps. Specializing in dynamic app development for Android and iOS, we're committed to creating engaging, user-friendly digital solutions. Let's bring your app vision to life."
+>
+
+  <main class="px-4">
+    <SectionContainer class="py-20 pb-20 relative">
+
+      <div class="flex flex-col md:flex-row items-center">
+        <h1 class="text-gray-900 text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-0 mt-2 md:mt-0 p-4">
+          Hey, I'm TryAgain
+        </h1>
+        <a href="mailto:hello@tryagain.app" target="_blank" rel="noopener" class="ml-0 md:ml-7 hover:scale-105 transition mt-2 md:mt-0">
+          <Badge class="md:mt-2">Ready for work</Badge>
+
+        </a>
+      </div>
+      
+  
+      <div class="md:flex md:items-center md:justify-between md:pt-10 md:p-5 p-7"> 
+        <h2 class="text-xl lg:text-2xl text-black md:w-1/2 mb-4 md:mb-0">
+          <strong>Bridging Your Ideas and the Digital World:</strong> We Specialize in Creating <strong>Dynamic Apps for Android and iOS</strong>. Our Passion for Technology Drives Us to Deliver <strong>Engaging, User-Friendly Solutions</strong>. Let's Make Your App Vision a <strong>Reality</strong>.
+        </h2>
+        <!-- Contenedor para el texto en pantallas medianas y grandes -->
+        
+        <div class="order-last md:order-none md:w-1/2 flex md:justify-end items-end md:absolute bottom-0 right-0 pb-4 md:pb-0 justify-end text-pretty"> <!-- Clases para ajuste en móviles y pantallas medianas -->
+          <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+          <dotlottie-player
+            src="https://lottie.host/f88cf9a3-bf5c-4eec-a3ae-a779d7bd06e5/NlVE52gLMz.json"
+            background="transparent"
+            speed="1"
+            style="width: 300px; height: 300px;"
+            loop
+            autoplay>
+          </dotlottie-player>
+        </div>
+      </div>
+  
+
+
+    </SectionContainer>
+
+
+    <SectionContainer id="about" class="p-6">
+      <h2
+        class="text-3xl font-semibold mb-6 flex gap-x-3 items-center text-black/80 text-pretty"
+      >
+       Who we are
+      </h2>
+      <div/>
+      <AboutMe />
+    </SectionContainer>
+    <SectionContainer class="p-6">
+      <div class="text-right py-10">
+        <h2 class="text-3xl font-semibold mb-6 text-black/80">
+          Our Apps
+        </h2>
+
+      </div>
+      <div class="app-icons-container flex overflow-hidden">
+        <img src="/images/app1.png" alt="App 1" class="app-icon mx-4"/>
+        <img src="/images/app2.png" alt="App 2" class="app-icon mx-4"/>
+        <img src="/images/app3.png" alt="App 3" class="app-icon mx-4"/>
+        <img src="/images/app4.png" alt="App 4" class="app-icon mx-4"/>
+        <img src="/images/app5.png" alt="App 5" class="app-icon mx-4"/>
+        <img src="/images/app6.png" alt="App 6" class="app-icon mx-4"/>
+        <img src="/images/app7.png" alt="App 7" class="app-icon mx-4"/>
+        <img src="/images/app8.png" alt="App 8" class="app-icon mx-4"/>
+        <img src="/images/app9.png" alt="App 9" class="app-icon mx-4"/>
+ 
+        
+        <!-- Añade más íconos según sea necesario -->
+      </div>
+      
+    </SectionContainer>
+  </main>
+</Layout>
+
