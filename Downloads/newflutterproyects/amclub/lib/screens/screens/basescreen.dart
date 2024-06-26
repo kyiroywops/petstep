@@ -1,5 +1,8 @@
+import 'package:amclub/screens/screens/daily_screen.dart';
 import 'package:amclub/screens/screens/home_page.dart';
+import 'package:amclub/screens/screens/meditation_screen.dart';
 import 'package:amclub/screens/screens/profile_page.dart';
+import 'package:amclub/screens/screens/read_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,8 +15,10 @@ class _BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(), // Historial
-        Text('Calendario', textAlign: TextAlign.center), // Calendario
-       ProfileScreen()  
+    DailyScreen(),
+    MeditationScreen(),
+    ReadScreen(),
+    ProfileScreen()  
             
   ];
 
@@ -29,8 +34,11 @@ class _BaseScreenState extends State<BaseScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             _buildNavItem(FontAwesomeIcons.house, 'Home', 0),
-            _buildNavItem(FontAwesomeIcons.solidStarHalfStroke, 'Stats', 1),
-            _buildNavItem(FontAwesomeIcons.solidCircleUser, 'Profile', 2),
+             _buildNavItem(FontAwesomeIcons.clipboardCheck, 'Daily', 1),
+            _buildNavItem(FontAwesomeIcons.solidFaceSmile, 'Meditation', 2),
+            _buildNavItem(FontAwesomeIcons.book, 'Read', 3),
+
+            _buildNavItem(FontAwesomeIcons.solidCircleUser, 'Profile', 4),
           ],
         ),
       ),

@@ -14,7 +14,7 @@ class CustomProgressIndicator extends StatelessWidget {
     this.height = 20.0,
     this.backgroundColor = Colors.grey,
     this.progressColor = Colors.blue,
-    this.totalDivisions = 4, // Por ejemplo, divide en 4 fases
+    this.totalDivisions = 5, // Por ejemplo, divide en 4 fases
   }) : super(key: key);
 
   @override
