@@ -65,8 +65,13 @@ const { description, title } = Astro.props
   }
 
   @keyframes slideRight {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-400%); } /* Desplaza la mitad del contenedor para empezar de nuevo */
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-100% - 100px)); }
+}
+
+@-webkit-keyframes slideRight {
+  0% { -webkit-transform: translateX(0); }
+  100% { -webkit-transform: translateX(calc(-100% - 100px)); }
 }
 
 .app-icons-container {
@@ -78,10 +83,13 @@ const { description, title } = Astro.props
 .app-icon {
   width: 100px; /* Ancho del ícono */
   height: 100px; /* Alto del ícono */
+  -webkit-animation: slideRight 40s linear infinite;
   animation: slideRight 40s linear infinite;
   animation-delay: -20s;
+  -webkit-animation-delay: -20s;
   object-fit: contain; /* Mantiene la proporción sin distorsión */
   border-radius: 20px; /* Esquinas redondeadas */
+  margin: 0 15px; /* espacio horizontal entre íconos */
 }
 
 </style>

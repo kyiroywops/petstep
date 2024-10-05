@@ -1,0 +1,106 @@
+---
+import Header from "../components/Header.astro"
+import Footer from "../components/Footer.astro"
+---
+
+<Header title="Support" />
+
+<main style="max-width: 800px; margin: auto; padding: 2rem; display: flex; flex-direction: column; gap: 2rem; padding-bottom: 2rem;">
+  <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">Contact Us</h1>
+  <p style="font-size: 1.2rem; line-height: 1.6; color: #333;">
+    We're here to help! If you have any questions or need assistance, please fill out the form below. We'll get back to you as soon as possible.
+  </p>
+
+  <form id="contactForm" action="mailto:hello@tryagain.app" method="post" enctype="text/plain" style="display: flex; flex-direction: column; gap: 1.5rem;">
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <label for="name" style="font-size: 1.2rem; font-weight: bold;">Name</label>
+      <input type="text" id="name" name="name" required minlength="2" maxlength="50" style="padding: 1rem; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;">
+      <div style="display: flex; justify-content: space-between;">
+        <span id="nameError" style="color: red; display: none;">Name must be between 2 and 50 characters.</span>
+        <span id="nameCount" style="font-size: 0.9rem; color: #666;">0 / 50</span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <label for="email" style="font-size: 1.2rem; font-weight: bold;">Email</label>
+      <input type="email" id="email" name="email" required style="padding: 1rem; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;">
+      <span id="emailError" style="color: red; display: none;">Please enter a valid email address.</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <label for="message" style="font-size: 1.2rem; font-weight: bold;">Message</label>
+      <textarea id="message" name="message" rows="8" required minlength="10" maxlength="500" style="padding: 1rem; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;"></textarea>
+      <div style="display: flex; justify-content: space-between;">
+        <span id="messageError" style="color: red; display: none;">Message must be between 10 and 500 characters.</span>
+        <span id="messageCount" style="font-size: 0.9rem; color: #666;">0 / 500</span>
+      </div>
+    </div>
+
+    <button type="submit" style="background-color: black; color: white; font-weight: bold; padding: 1rem; border-radius: 50px; border: none; font-size: 1.2rem; cursor: pointer; transition: background-color 0.3s;">
+      Send Message
+    </button>
+    <p style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">
+      Your message will be sent to hello@tryagain.app.
+    </p>
+  </form>
+</main>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('contactForm');
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const message = document.getElementById('message');
+    
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const messageError = document.getElementById('messageError');
+    
+    const nameCount = document.getElementById('nameCount');
+    const messageCount = document.getElementById('messageCount');
+
+    if (form && name && email && message) {
+      const updateCount = (input, count, maxLength) => {
+        count.textContent = `${input.value.length} / ${maxLength}`;
+      };
+
+      name.addEventListener('input', () => updateCount(name, nameCount, 50));
+      message.addEventListener('input', () => updateCount(message, messageCount, 500));
+
+      form.addEventListener('submit', function(event) {
+        let isValid = true;
+        
+        if (name.value.length < 2 || name.value.length > 50) {
+          nameError.style.display = 'block';
+          isValid = false;
+        } else {
+          nameError.style.display = 'none';
+        }
+
+        if (!email.checkValidity()) {
+          emailError.style.display = 'block';
+          isValid = false;
+        } else {
+          emailError.style.display = 'none';
+        }
+
+        if (message.value.length < 10 || message.value.length > 500) {
+          messageError.style.display = 'block';
+          isValid = false;
+        } else {
+          messageError.style.display = 'none';
+        }
+
+        if (!isValid) {
+          event.preventDefault();
+        }
+      });
+
+      // Initialize the character counts
+      updateCount(name, nameCount, 50);
+      updateCount(message, messageCount, 500);
+    }
+  });
+</script>
+
+<Footer />
