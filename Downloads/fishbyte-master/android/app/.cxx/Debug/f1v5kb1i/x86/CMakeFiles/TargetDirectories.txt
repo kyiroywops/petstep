@@ -1,0 +1,2 @@
+/Users/alexisjonshon/Downloads/fishbyte-master/android/app/.cxx/Debug/f1v5kb1i/x86/CMakeFiles/edit_cache.dir
+/Users/alexisjonshon/Downloads/fishbyte-master/android/app/.cxx/Debug/f1v5kb1i/x86/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,2 @@
+/Users/alexisjonshon/Downloads/fishbyte-master/android/app/.cxx/Debug/f1v5kb1i/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/alexisjonshon/Downloads/fishbyte-master/android/app/.cxx/Debug/f1v5kb1i/armeabi-v7a/CMakeFiles/rebuild_cache.dir
