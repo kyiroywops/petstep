@@ -31,17 +31,22 @@ class UploadQueueBar extends ConsumerWidget {
       }
     }
     final averageProgress = (uploadCount == 0) ? 0 : (totalProgress / uploadCount);
+    
+    // Debug solo cuando hay cambios significativos de progreso
+    if (uploadCount > 0 && averageProgress % 10 == 0) {
+      debugPrint("🔍 UI - Progreso promedio: ${averageProgress.toStringAsFixed(1)}% (${uploadCount} tareas activas)");
+    }
 
     // Mensaje
-  final text = 
-    "Subiendo $uploading caso${uploading == 1 ? '' : 's'} en progreso, "
-    "$pending caso${pending == 1 ? '' : 's'} en cola... "
-    "(${averageProgress.toStringAsFixed(0)}% aprox)";
+    final text = 
+      "Subiendo $uploading caso${uploading == 1 ? '' : 's'} en progreso, "
+      "$pending caso${pending == 1 ? '' : 's'} en cola... "
+      "(${averageProgress.toStringAsFixed(0)}% aprox)";
 
-      return Container(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration:  BoxDecoration(
-      color: Colors.greenAccent.shade400,
+        color: Colors.greenAccent.shade400,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20),
           bottomRight: Radius.circular(20),

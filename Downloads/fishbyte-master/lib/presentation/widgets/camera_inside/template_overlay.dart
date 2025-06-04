@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class BuildTemplateOverlay extends StatelessWidget {
@@ -21,13 +22,28 @@ class BuildTemplateOverlay extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (ctx, cts) {
-        final w = cts.maxWidth * 0.65;
-        final h = cts.maxHeight * 0.65;
+        // Configuración específica por plataforma
+        double w, h, leftOffset, topOffset;
+        
+        if (Platform.isIOS) {
+          // iPhone: más grande y un poco más a la izquierda
+          w = cts.maxWidth * 0.80;
+          h = cts.maxHeight * 0.80;
+          leftOffset = (cts.maxWidth - w) / 2 - cts.maxWidth * 0.07; // Mover 10% a la izquierda
+          topOffset = (cts.maxHeight - h) / 2;
+        } else {
+          // Android: más grande y centrado
+          w = cts.maxWidth * 0.85;
+          h = cts.maxHeight * 0.85;
+          leftOffset = (cts.maxWidth - w) / 2; // Centrado
+          topOffset = (cts.maxHeight - h) / 2;
+        }
+        
         return Stack(
           children: [
             Positioned(
-              left: cts.maxWidth * 0.05,
-              top: cts.maxHeight * 0.15,
+              left: leftOffset,
+              top: topOffset,
               child: Container(
                 width: w,
                 height: h,

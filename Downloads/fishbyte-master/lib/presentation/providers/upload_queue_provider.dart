@@ -255,61 +255,83 @@ Future<void> _initQueue() async {
     try {
       debugPrint("📤 Iniciando subida de reporte: ${task.report.name}");
       
-      // Función para actualizar el progreso
+      // Variable para mantener el progreso acumulativo entre métodos
+      double baseProgress = 0;
+      
+      // Función para actualizar el progreso de manera acumulativa
       void updateProgress(double p) {
+        // El progreso total es el progreso base + el progreso del método actual
+        final totalProgress = baseProgress + p;
+        
         // Buscar el índice actual de la tarea (puede haber cambiado)
         final currentIndex = state.indexWhere((t) => t.report.name == task.report.name);
         if (currentIndex >= 0) {
-          // Actualiza el progreso en la cola solo si la tarea aún existe
-          _updateTask(currentIndex, task.copyWith(progress: p));
+          // ARREGLO: Usar el estado actual de la tarea, no la referencia original
+          final currentTask = state[currentIndex];
+          _updateTask(currentIndex, currentTask.copyWith(progress: totalProgress));
+          
+          // Debug para verificar que se está actualizando
+          debugPrint("📊 Progreso actualizado en cola para ${task.report.name}: ${totalProgress}% (base: $baseProgress + actual: $p)");
+        } else {
+          debugPrint("⚠️ No se pudo encontrar la tarea ${task.report.name} en la cola para actualizar progreso");
         }
       }
       
       // Intentamos múltiples métodos de subida en orden de preferencia
       bool success = false;
       
-      // 1. Método usando proxy
+      // 1. Método usando proxy (peso: 0-30%)
       try {
         debugPrint("🔄 Intentando método 1: Subida vía proxy...");
+        baseProgress = 0;
         success = await uploadReportUsingProxy(
           ref, 
           task.report,
-          onProgress: updateProgress,
+          onProgress: (p) => updateProgress(p * 0.3), // Escalar a 30% máximo
         );
         
         if (success) {
           debugPrint("✅ Éxito con método 1 (proxy)");
+          updateProgress(100); // Completar al 100%
+        } else {
+          baseProgress = 30; // Si falla, mantenemos el 30% como base para el siguiente método
         }
       } catch (proxyError) {
         debugPrint("⚠️ Método 1 (proxy) falló: $proxyError");
+        baseProgress = 30; // Fallo, pero mantenemos progreso
       }
       
-      // 2. Si falló el proxy, intentamos el método web
+      // 2. Si falló el proxy, intentamos el método web (peso: 30-100%)
       if (!success) {
         try {
           debugPrint("🔄 Intentando método 2: Subida estilo web...");
+          // No reseteamos baseProgress, continuamos desde 30%
           success = await uploadReportWebMethod(
             ref,
             task.report,
-            onProgress: updateProgress,
+            onProgress: (p) => updateProgress(p * 0.7), // Escalar de 0-70% para completar hasta 100%
           );
           
           if (success) {
             debugPrint("✅ Éxito con método 2 (web)");
+          } else {
+            baseProgress = 70; // Si falla, mantenemos el 70% como base
           }
         } catch (webError) {
           debugPrint("⚠️ Método 2 (web) falló: $webError");
+          baseProgress = 70; // Fallo, pero mantenemos progreso
         }
       }
       
-      // 3. Si los anteriores fallan, método original
+      // 3. Si los anteriores fallan, método original (peso: 70-100%)
       if (!success) {
         try {
           debugPrint("🔄 Intentando método 3: Subida original...");
+          // No reseteamos baseProgress, continuamos desde 70%
           success = await uploadReport(
             ref,
             task.report,
-            onProgress: updateProgress,
+            onProgress: (p) => updateProgress(p * 0.3), // Los últimos 30%
           );
           
           if (success) {
@@ -322,6 +344,9 @@ Future<void> _initQueue() async {
 
       if (success) {
         debugPrint("✅ Subida exitosa para ${task.report.name}");
+        // Asegurar que el progreso esté en 100% al final
+        updateProgress(100);
+        
         // Borrar JSON local del reporte (si no se borró ya en el método de subida)
         await LocalReportStorage.deleteLocalReport(task.report.name);
         ref.invalidate(allReportsProvider);
@@ -368,9 +393,15 @@ Future<void> _initQueue() async {
       return; // Salir si el índice no es válido
     }
     
+    final oldTask = state[index];
     final list = [...state];
     list[index] = newTask;
     state = list; // disparará persistencia
+    
+    // Debug para verificar que la actualización fue exitosa
+    debugPrint("✓ Tarea actualizada en índice $index: ${newTask.report.name}");
+    debugPrint("  - Estado anterior: ${oldTask.status} (${oldTask.progress}%)");
+    debugPrint("  - Estado nuevo: ${newTask.status} (${newTask.progress}%)");
   }
 
   /// Limpia tareas finalizadas (done/error)

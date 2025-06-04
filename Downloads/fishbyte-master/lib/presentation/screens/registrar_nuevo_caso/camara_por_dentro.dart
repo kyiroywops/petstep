@@ -26,7 +26,7 @@ class FishPhotoSessionFullScreen extends ConsumerStatefulWidget {
       _FishPhotoSessionFullScreenState();
 }
 
-class _FishPhotoSessionFullScreenState extends ConsumerState<FishPhotoSessionFullScreen> {
+class _FishPhotoSessionFullScreenState extends ConsumerState<FishPhotoSessionFullScreen> with WidgetsBindingObserver {
   final _photoStorage = PhotoStorageService();
   
   List<CameraDescription>? _cameras;
@@ -61,13 +61,39 @@ class _FishPhotoSessionFullScreenState extends ConsumerState<FishPhotoSessionFul
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _forceLandscape();
     _initCamera();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Manejar cambios en el lifecycle de la app
+    if (!_isInitialized) return;
+    
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      // Pausar la cámara cuando la app está inactiva
+      if (_controller.value.isInitialized) {
+        _controller.dispose();
+        setState(() => _isInitialized = false);
+      }
+    } else if (state == AppLifecycleState.resumed) {
+      // Reinicializar cuando la app vuelve a estar activa
+      if (!_isInitialized) {
+        _initCamera();
+      }
+    }
+  }
+
+  @override
   void dispose() {
-    _controller.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    // Liberar el controller de forma segura
+    if (_controller.value.isInitialized) {
+      _controller.dispose();
+    }
+    // Restaurar orientaciones permitidas
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     super.dispose();
   }
 
@@ -84,34 +110,57 @@ class _FishPhotoSessionFullScreenState extends ConsumerState<FishPhotoSessionFul
   // INICIALIZAR CÁMARA
   /////////////////////////////////////////////////////////////
   Future<void> _initCamera() async {
-    _cameras = await availableCameras();
-    if (_cameras == null || _cameras!.isEmpty) return;
+    if (_isInitialized) return; // Evitar múltiples inicializaciones
+    
+    try {
+      _cameras = await availableCameras();
+      if (_cameras == null || _cameras!.isEmpty) return;
 
-    final backCam = _cameras!.firstWhere(
-      (c) => c.lensDirection == CameraLensDirection.back,
-      orElse: () => _cameras!.first,
-    );
+      final backCam = _cameras!.firstWhere(
+        (c) => c.lensDirection == CameraLensDirection.back,
+        orElse: () => _cameras!.first,
+      );
 
-    _controller = CameraController(
-      backCam,
-      ResolutionPreset.max,
-      enableAudio: false,
-    );
+      // Liberar controller anterior si existe y está inicializado
+      try {
+        if (_controller.value.isInitialized) {
+          await _controller.dispose();
+        }
+      } catch (e) {
+        print("Error liberando controller anterior: $e");
+      }
 
-    _initFuture = _controller.initialize();
-    await _initFuture;
+      _controller = CameraController(
+        backCam,
+        ResolutionPreset.high, // Usar una resolución estándar para todos
+        enableAudio: false,
+      );
 
-    // Bloquear la orientación de la captura dependiendo de la plataforma
-    if (Platform.isIOS) {
-      await _controller.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
-    } else {
-      await _controller.lockCaptureOrientation(DeviceOrientation.landscapeRight);
-      print("Orientación en Android landscapeRight");
+      _initFuture = _controller.initialize();
+      await _initFuture;
+
+      // Verificar si el widget sigue montado antes de continuar
+      if (!mounted) return;
+
+      // Configuración mínima de orientación
+      if (Platform.isIOS) {
+        try {
+          await _controller.lockCaptureOrientation(DeviceOrientation.landscapeLeft);
+        } catch (e) {
+          print("Error configurando orientación iOS: $e");
+        }
+      }
+      // Para Android, no configurar orientación en la inicialización
+
+      if (!mounted) return;
+
+      setState(() => _isInitialized = true);
+    } catch (e) {
+      print("Error inicializando cámara: $e");
+      if (mounted) {
+        setState(() => _isInitialized = false);
+      }
     }
-
-    if (!mounted) return;
-
-    setState(() => _isInitialized = true);
   }
 
   /////////////////////////////////////////////////////////////
@@ -128,6 +177,7 @@ class _FishPhotoSessionFullScreenState extends ConsumerState<FishPhotoSessionFul
       }
 
       await _initFuture;
+      
       final xfile = await _controller.takePicture();
 
       if (_isRetaking && _retakeIndex != null) {
@@ -158,7 +208,7 @@ class _FishPhotoSessionFullScreenState extends ConsumerState<FishPhotoSessionFul
         return;
       }
 
-      // --- Caso “foto nueva” (sin retake) ---
+      // --- Caso "foto nueva" (sin retake) ---
       final s = ref.read(photoSessionProvider);
 
       if (s.currentStep <= 4) {

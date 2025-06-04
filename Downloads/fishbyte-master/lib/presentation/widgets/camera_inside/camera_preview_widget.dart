@@ -15,26 +15,36 @@ class BuildCameraPreviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ratio = controller.value.aspectRatio;
-
     if (Platform.isAndroid) {
-      // Ajustes para Android => rotar manual + invertir ratio
-      return RotatedBox(
-        quarterTurns: 1,
-        child: AspectRatio(
-          aspectRatio: 1 / ratio,
-          child: CameraPreview(controller),
-        ),
-      );
+      return _buildAndroidPreview(context);
     } else if (Platform.isIOS) {
-      // Ajustes para iOS => se suele mostrar bien con aspectRatio normal
-      return AspectRatio(
-        aspectRatio: ratio,
-        child: CameraPreview(controller),
-      );
+      return _buildIOSPreview();
     } else {
-      // Caso por defecto (otros SO)
       return CameraPreview(controller);
     }
+  }
+
+  Widget _buildAndroidPreview(BuildContext context) {
+    // Enfoque simple: Solo ajustar el aspect ratio para Android
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: FittedBox(
+        fit: BoxFit.cover,
+        child: SizedBox(
+          width: controller.value.previewSize?.width ?? 0,
+          height: controller.value.previewSize?.height ?? 0,
+          child: CameraPreview(controller),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIOSPreview() {
+    final ratio = controller.value.aspectRatio;
+    return AspectRatio(
+      aspectRatio: ratio,
+      child: CameraPreview(controller),
+    );
   }
 }
