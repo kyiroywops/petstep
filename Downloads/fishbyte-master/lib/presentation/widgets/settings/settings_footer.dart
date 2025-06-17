@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,10 +70,7 @@ class SettingsFooter extends ConsumerWidget {
                           SizedBox(
                             width: 20,
                             height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
+                            child: CupertinoActivityIndicator(color: Colors.white),
                           ),
                           SizedBox(width: 12),
                           Text('Cerrando sesión...'),
@@ -108,7 +106,7 @@ class SettingsFooter extends ConsumerWidget {
             ? const SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
+                child: CupertinoActivityIndicator(),
               )
             : Text(
                 'Cerrar sesión',

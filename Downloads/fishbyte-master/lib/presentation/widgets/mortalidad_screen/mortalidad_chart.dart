@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,7 @@ class MortalidadChartWidget extends ConsumerWidget {
     final monthlyData = ref.watch(mortalityDataProvider);
     
     if (monthlyData.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CupertinoActivityIndicator());
     }
 
     final maxMortalidad = monthlyData.reduce((a, b) => a > b ? a : b);

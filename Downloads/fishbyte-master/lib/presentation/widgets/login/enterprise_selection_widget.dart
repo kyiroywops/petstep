@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fishbyte/presentation/providers/login/enterprise_selection_provider.dart';
 
@@ -20,21 +23,25 @@ class EnterpriseSelectionWidget extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Divider(
+              color: Colors.grey[300],
+              thickness: 1,
+            ),
+            const SizedBox(height: 10),
             Text(
               'Selecciona tu empresa',
               style: GoogleFonts.outfit(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 5),
             Text(
               'Elige la empresa con la que deseas iniciar sesión',
               style: GoogleFonts.outfit(
                 color: Colors.grey[600],
-                fontSize: 12,
+                fontSize: 10,
                 fontWeight: FontWeight.w400,
               ),
               textAlign: TextAlign.center,
@@ -56,10 +63,11 @@ class EnterpriseSelectionWidget extends ConsumerWidget {
             if (selectedEnterprise != null)
               ElevatedButton(
                 onPressed: () {
+                  HapticFeedback.lightImpact();
                   ref.read(showGoogleLoginProvider.notifier).state = true;
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[600],
+                  backgroundColor: Colors.blueAccent,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   shape: RoundedRectangleBorder(
@@ -97,9 +105,9 @@ class EnterpriseSelectionWidget extends ConsumerWidget {
         child: Container(
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.blue[50] : Colors.grey[50],
+            color: isSelected ? Colors.blueAccent.withOpacity(0.1) : Colors.grey[50],
             border: Border.all(
-              color: isSelected ? Colors.blue[600]! : Colors.grey[300]!,
+              color: isSelected ? Colors.blueAccent.withOpacity(0.8) : Colors.grey[300]!,
               width: isSelected ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(12.0),
@@ -136,8 +144,8 @@ class EnterpriseSelectionWidget extends ConsumerWidget {
               ),
               if (isSelected)
                 Icon(
-                  Icons.check_circle,
-                  color: Colors.blue[600],
+                  FontAwesomeIcons.solidCircleCheck,
+                  color: Colors.blueAccent,
                   size: 24,
                 ),
             ],
@@ -150,7 +158,7 @@ class EnterpriseSelectionWidget extends ConsumerWidget {
   Widget _buildLoadingState() {
     return Column(
       children: [
-        const CircularProgressIndicator(),
+        const CupertinoActivityIndicator(),
         const SizedBox(height: 16),
         Text(
           'Cargando empresas disponibles...',

@@ -1,6 +1,7 @@
 import 'package:fishbyte/presentation/controllers/login_controller.dart';
 import 'package:fishbyte/presentation/providers/login/enterprise_selection_provider.dart';
 import 'package:fishbyte/presentation/widgets/login/enterprise_selection_widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -81,7 +82,7 @@ class LoginScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 200),
+                    const SizedBox(height: 120),
 
                     // Logo en el centro
                     Center(
@@ -91,7 +92,7 @@ class LoginScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 350),
+                    const SizedBox(height: 100),
 
                     // Expanded para que, si hay espacio, el contenedor blanco llene el resto
                     Expanded(
@@ -120,8 +121,6 @@ class LoginScreen extends ConsumerWidget {
                               textAlign: TextAlign.center,
                             ),
                             
-                            const SizedBox(height: 5),
-                            
                             Text(
                               showGoogleLogin ? 
                                 'Inicia sesión con tu cuenta de Google' :
@@ -134,7 +133,7 @@ class LoginScreen extends ConsumerWidget {
                               textAlign: TextAlign.center,
                             ),
                             
-                            const SizedBox(height: 30),
+                            const SizedBox(height: 10),
 
                             // Mostrar selección de empresa o botón de Google según el estado
                             if (!showGoogleLogin) 
@@ -144,27 +143,29 @@ class LoginScreen extends ConsumerWidget {
                               // Botón Google y lógica relacionada
                               Column(
                                 children: [
+                                  const SizedBox(height: 10),
                                   // Mostrar empresa seleccionada
                                   if (selectedEnterprise != null)
+
                                     Container(
                                       padding: const EdgeInsets.all(12),
                                       margin: const EdgeInsets.only(bottom: 20),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[50],
+                                        color: Colors.blueAccent.withOpacity(0.1),
                                         borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: Colors.blue[200]!),
+                                        border: Border.all(color: Colors.blueAccent.withOpacity(0.1)),
                                       ),
                                       child: Row(
                                         children: [
-                                          Icon(Icons.business, color: Colors.blue[600], size: 20),
+                                          Icon(FontAwesomeIcons.solidBuilding, color: Colors.blueAccent, size: 15),
                                           const SizedBox(width: 10),
                                           Expanded(
                                             child: Text(
-                                              'Empresa: ${selectedEnterprise!['name']}',
+                                              '${selectedEnterprise!['name']}',
                                               style: GoogleFonts.outfit(
-                                                color: Colors.blue[800],
+                                                color: Colors.blueAccent,
                                                 fontSize: 14,
-                                                fontWeight: FontWeight.w600,
+                                                fontWeight: FontWeight.w700,
                                               ),
                                             ),
                                           ),
@@ -174,7 +175,28 @@ class LoginScreen extends ConsumerWidget {
                                               ref.read(showGoogleLoginProvider.notifier).state = false;
                                               ref.read(selectedEnterpriseProvider.notifier).state = null;
                                             },
-                                            child: Icon(Icons.edit, color: Colors.blue[600], size: 20),
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blueAccent.withOpacity(0.1),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(color: Colors.blueAccent.withOpacity(0.1)),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    // cambiar empresa
+                                                    Text(
+                                                      'Cambiar empresa',
+                                                      style: GoogleFonts.outfit(
+                                                        color: Colors.blueAccent,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Icon(FontAwesomeIcons.solidPenToSquare, color: Colors.blueAccent, size: 15),
+                                                  ],
+                                                ),
+                                              ),
                                           ),
                                         ],
                                       ),
@@ -241,7 +263,7 @@ class LoginScreen extends ConsumerWidget {
                                     Column(
                                       children: [
                                         const Center(
-                                          child: CircularProgressIndicator(),
+                                          child: CupertinoActivityIndicator(),
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
@@ -273,7 +295,8 @@ class LoginScreen extends ConsumerWidget {
 
                             // Términos y Políticas (siempre visibles)
                             Padding(
-                              padding: const EdgeInsets.only(top: 20),
+                              // padding depende si es antes o despues de la seleccion de empresa
+                              padding: showGoogleLogin ? const EdgeInsets.only(top: 5) : const EdgeInsets.only(top: 10),
                               child: Center(
                                 child: RichText(
                                   textAlign: TextAlign.center,
@@ -288,7 +311,7 @@ class LoginScreen extends ConsumerWidget {
                                         text: "Términos de servicio",
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.blue,
+                                          color: Colors.blueAccent,
                                         ),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () async {
@@ -303,7 +326,7 @@ class LoginScreen extends ConsumerWidget {
                                         text: "Política de privacidad,",
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.blue,
+                                          color: Colors.blueAccent,
                                         ),
                                         recognizer: TapGestureRecognizer()
                                          ..onTap = () async {
