@@ -38,8 +38,8 @@ class _RegistroTerminadoOpcionesState extends ConsumerState<RegistroTerminadoOpc
     
     if (!mounted) return;
     
-    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-    context.go('/registros');
+    // Usar la nueva pantalla de splash para manejar la transición
+    context.go('/splash-back-to-vertical?target=/registros');
   }
 
   @override

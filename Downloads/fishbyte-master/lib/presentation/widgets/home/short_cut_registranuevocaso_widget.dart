@@ -68,7 +68,7 @@ class ShortCutRegistros extends ConsumerWidget {
                 HapticFeedback.lightImpact();
                 // Reseteamos la sesión de fotos para empezar de cero
                 ref.read(photoSessionProvider.notifier).reset();
-                context.go('/centerselection');
+                context.go('/splash-orientation');
               },
               child: Container(
                 height: 40,

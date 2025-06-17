@@ -1,5 +1,7 @@
 import 'package:fishbyte/presentation/providers/login/centers_provider.dart';
 import 'package:fishbyte/presentation/providers/login/auth_provider.dart';
+import 'package:fishbyte/presentation/providers/user_info_provider.dart';
+import 'package:fishbyte/presentation/providers/upload_queue_provider.dart';
 import 'package:fishbyte/main.dart';  // Importar para acceder a las constantes
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,36 +13,45 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:io' show Platform;
 
 class LoginController extends StateNotifier<AsyncValue<void>> {
-  LoginController(this.ref) : super(const AsyncValue.data(null)) {
-    // Escuchar cambios en la autenticación
-    _supabase.auth.onAuthStateChange.listen((data) {
-      final event = data.event;
-      debugPrint("Auth event: $event");
-      debugPrint("Auth session: ${_supabase.auth.currentSession?.user.email ?? 'No session'}");
-      if (event == AuthChangeEvent.signedIn) {
-        // El usuario ha iniciado sesión, obtener y guardar sus datos
-        _processSignIn();
-      }
-    });
-  }
+  LoginController(this.ref) : super(const AsyncValue.data(null));
 
   final Ref ref;
   final _supabase = Supabase.instance.client;
+  String? _selectedEnterpriseId; // Guardar la empresa seleccionada
 
-  // Procesar el inicio de sesión exitoso
-  Future<void> _processSignIn() async {
+  // Método para obtener todas las empresas disponibles
+  Future<List<Map<String, dynamic>>> getAllEnterprises() async {
+    try {
+      final authRepository = ref.read(authRepositoryProvider);
+      return await authRepository.getAllEnterprises();
+    } catch (e) {
+      debugPrint("Error obteniendo empresas: $e");
+      throw Exception("Error al obtener las empresas: $e");
+    }
+  }
+
+  // Procesar el inicio de sesión exitoso con empresa específica
+  Future<void> _processSignIn(String enterpriseId) async {
     try {
       state = const AsyncValue.loading();
       
-      debugPrint("Procesando inicio de sesión: usuario autenticado con éxito");
+      debugPrint("Procesando inicio de sesión: usuario autenticado con éxito para empresa $enterpriseId");
       
       // Obtener el repositorio de autenticación
       final authRepository = ref.read(authRepositoryProvider);
       
-      // Procesar los datos del usuario
-      final userData = await authRepository.loginWithGoogle();
+      // Procesar los datos del usuario con la empresa específica
+      final userData = await authRepository.loginWithGoogle(enterpriseId);
       
       debugPrint("Datos de usuario obtenidos con éxito: ${userData['userData']['email']}");
+      
+      // ✅ IMPORTANTE: Invalidar providers para que se recarguen con los nuevos datos
+      ref.invalidate(userInfoProvider);
+      debugPrint("✅ Providers invalidados - datos de usuario actualizados");
+      
+      // 🧹 IMPORTANTE: Limpiar la cola de subida para evitar conflictos con reportes de empresas anteriores
+      ref.read(uploadQueueProvider.notifier).clearAll();
+      debugPrint("🧹 Cola de subida limpiada - evitando conflictos entre empresas");
       
       // Éxito
       state = const AsyncValue.data(null);
@@ -50,13 +61,16 @@ class LoginController extends StateNotifier<AsyncValue<void>> {
     }
   }
 
-  // Método para iniciar sesión con Google
+  // Método para iniciar sesión con Google y empresa específica
   // Este método se llama desde la pantalla de login
-  Future<void> signInWithGoogle() async {
+  Future<void> signInWithGoogle(String enterpriseId) async {
     try {
       state = const AsyncValue.loading();
       
-      debugPrint("Iniciando proceso de autenticación nativa con Google...");
+      // Guardar la empresa seleccionada
+      _selectedEnterpriseId = enterpriseId;
+      
+      debugPrint("Iniciando proceso de autenticación nativa con Google para empresa: $enterpriseId");
       
       // Inicializar GoogleSignIn con los IDs de cliente configurados
       final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -95,7 +109,9 @@ class LoginController extends StateNotifier<AsyncValue<void>> {
       
       debugPrint("Proceso de autenticación con Google completado con éxito");
       
-      // El listener de onAuthStateChange procesará la sesión y actualizará el estado
+      // Ahora procesar los datos del usuario con la empresa seleccionada
+      await _processSignIn(enterpriseId);
+      
     } catch (e, st) {
       debugPrint("Error iniciando sesión con Google: ${e.toString()}");
       
@@ -121,6 +137,10 @@ class LoginController extends StateNotifier<AsyncValue<void>> {
       await authRepository.logout();
       
       debugPrint("Sesión cerrada con éxito");
+      
+      // ✅ IMPORTANTE: Invalidar providers para limpiar datos del usuario anterior
+      ref.invalidate(userInfoProvider);
+      debugPrint("✅ Providers invalidados - datos de usuario limpiados");
       
       state = const AsyncValue.data(null);
     } catch (e, st) {

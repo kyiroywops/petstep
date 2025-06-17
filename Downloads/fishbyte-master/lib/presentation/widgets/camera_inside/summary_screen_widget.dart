@@ -164,15 +164,23 @@ class SummaryScreenWidget extends ConsumerWidget {
                     }
                     
                     try {
+                      // Mapeo de nombres descriptivos para las imágenes obligatorias
+                      final mandatoryNames = {
+                        0: "completo",
+                        1: "branquias", 
+                        2: "organos_visibles",
+                        3: "organos_internos",
+                      };
+                      
                       // Procesar imágenes obligatorias
                       for (int i = 0; i < mandatory.length; i++) {
-                        final stepName = "Registro ${i + 1}";
-                        final imagePath = await ensureImageExists(mandatory[i], "mandatory_${i+1}");
+                        final descriptiveName = mandatoryNames[i] ?? "mandatory_${i+1}";
+                        final imagePath = await ensureImageExists(mandatory[i], descriptiveName);
                         
                         newImages.add(
                           ImageItem(
                             id: i + 1,
-                            name: stepName,
+                            name: descriptiveName,
                             img: imagePath,
                           ),
                         );
@@ -181,12 +189,13 @@ class SummaryScreenWidget extends ConsumerWidget {
                       // Procesar imágenes extras
                       final offset = mandatory.length + 1;
                       for (int j = 0; j < extras.length; j++) {
-                        final imagePath = await ensureImageExists(extras[j], "extra_${j+1}");
+                        final additionalName = "adicional_${j + 1}";
+                        final imagePath = await ensureImageExists(extras[j], additionalName);
                         
                         newImages.add(
                           ImageItem(
                             id: offset + j,
-                            name: "Registro adicional ${j + 1}",
+                            name: additionalName,
                             img: imagePath,
                           ),
                         );

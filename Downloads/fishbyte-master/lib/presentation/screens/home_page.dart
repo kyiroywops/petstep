@@ -93,10 +93,10 @@ class HomeScreen extends ConsumerWidget {
                         roleName: roleName
                       ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: BleTestStandaloneWidget(),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(5.0),
+                  //   child: BleTestStandaloneWidget(),
+                  // ),
                 
                   ],
                 ),

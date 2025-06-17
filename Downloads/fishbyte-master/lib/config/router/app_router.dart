@@ -12,6 +12,8 @@ import 'package:fishbyte/presentation/screens/configuracion_screen.dart';
 import 'package:fishbyte/presentation/screens/registrar_nuevo_caso/centrosSeleccion_horizontal.dart';
 import 'package:fishbyte/presentation/screens/registrar_nuevo_caso/jaulaSeleccion_horizontal.dart';
 import 'package:fishbyte/presentation/screens/registrar_nuevo_caso/weightSeleccion_horizontal.dart';
+import 'package:fishbyte/presentation/screens/registrar_nuevo_caso/splash_orientation_screen.dart';
+import 'package:fishbyte/presentation/screens/registrar_nuevo_caso/splash_back_to_vertical_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final appRouter = GoRouter(
@@ -54,6 +56,19 @@ final appRouter = GoRouter(
     ),
 
     // ruta horizontal app 
+    GoRoute(
+      path: '/splash-orientation',
+      builder: (context, state) => SplashOrientationScreen(),
+    ),
+
+    GoRoute(
+      path: '/splash-back-to-vertical',
+      builder: (context, state) {
+        final targetRoute = state.uri.queryParameters['target'] ?? '/registros';
+        return SplashBackToVerticalScreen(targetRoute: targetRoute);
+      },
+    ),
+
     GoRoute(
       path: '/centerselection',
       builder: (context, state) => HorizontalCenterSelection(),

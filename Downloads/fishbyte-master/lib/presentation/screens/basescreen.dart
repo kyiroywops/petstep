@@ -27,8 +27,8 @@ class _BaseScreenState extends State<BaseScreen> {
           children: <Widget>[
             _buildNavItem('assets/svg/homebasescreen.svg', 'Inicio', 1, '/home'),
             _buildNavItem('assets/svg/camerabasescreen.svg', 'Casos', 2, '/registros'),
-             _buildNavItem('assets/svg/graphbase.svg', 'Mortalidad', 3, '/mortalidadextraida'),
-            _buildNavItem('assets/svg/settingsbasescreen.svg', 'Configuración', 4, '/configuracion'),
+            //  _buildNavItem('assets/svg/graphbase.svg', 'Mortalidad', 3, '/mortalidadextraida'),
+            _buildNavItem('assets/svg/settingsbasescreen.svg', 'Configuración', 3, '/configuracion'),
           ],
         ),
       ),

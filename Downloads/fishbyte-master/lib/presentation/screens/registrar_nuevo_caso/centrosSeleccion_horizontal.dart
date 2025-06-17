@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Providers
 import 'package:fishbyte/presentation/providers/data_centers_and_cages_provider.dart';
@@ -111,16 +113,10 @@ class HorizontalCenterSelectionState
                               color: Colors.black,
                               size: 13,
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               HapticFeedback.lightImpact();
-                              // Ver si lo dejo centrado o lo dejo asi para que vuelva normal
-                              // SystemChrome.setPreferredOrientations([
-                              //   DeviceOrientation.portraitUp,
-                              //   DeviceOrientation.portraitDown,
-                              // ]).then((_) {
-                              //   context.go('/home'); // O la ruta desde
-                              // });
-                              context.go('/home');
+                              // Usar la pantalla de splash para manejar la transición de vuelta a vertical
+                              context.go('/splash-back-to-vertical?target=/registros');
                             },
                           ),
                         ),
@@ -228,7 +224,7 @@ class HorizontalCenterSelectionState
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 HapticFeedback.lightImpact();
 
                                 // 1) Generar el idGlobal con el formato LYTHIUM-dd-mm-yyyy-HH:MM:SS
@@ -252,7 +248,17 @@ class HorizontalCenterSelectionState
                                     nowUtc.toIso8601String().split('.').first +
                                         'Z';
 
-                                // 3) Crear un LocalReport inicial
+                                // 3) Obtener la empresa seleccionada desde SharedPreferences
+                                final prefs = await SharedPreferences.getInstance();
+                                final enterpriseData = prefs.getString('enterpriseData');
+                                String selectedEnterpriseId = '1'; // Valor por defecto
+                                
+                                if (enterpriseData != null) {
+                                  final Map<String, dynamic> enterprise = json.decode(enterpriseData);
+                                  selectedEnterpriseId = enterprise['id'] ?? '1';
+                                }
+                                
+                                // 4) Crear un LocalReport inicial con la empresa seleccionada
                                 final newReport = LocalReport(
                                   idGlobal: customIdGlobal,
                                   date: dateNow,
@@ -260,8 +266,7 @@ class HorizontalCenterSelectionState
                                   subido: false,
                                   name: "Reporte-$customIdGlobal",
                                   status: "readyToUpload",
-                                  enterprise:
-                                      '1', // Lo dejamos en 1 porque el backend es individual
+                                  enterprise: selectedEnterpriseId, // Usar la empresa seleccionada en el login
                                   user: userId.toString(),
                                   especie: "Pendiente",
                                   center: CenterData(

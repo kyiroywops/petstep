@@ -4,6 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Provider que verifica si hay conexión a Internet.
 final isConnectedProvider = StreamProvider<bool>((ref) async* {
   final connectivity = Connectivity();
+  
+  // Obtener el estado inicial inmediatamente
+  final initialResults = await connectivity.checkConnectivity();
+  yield initialResults.any((result) => result != ConnectivityResult.none);
+  
+  // Luego escuchar cambios
   await for (final results in connectivity.onConnectivityChanged) {
     // Verifica si la lista de resultados contiene algún tipo de conexión diferente a 'none'.
     yield results.any((result) => result != ConnectivityResult.none);
@@ -13,6 +19,16 @@ final isConnectedProvider = StreamProvider<bool>((ref) async* {
 /// Provider que retorna una descripción en español del tipo de conexión activa.
 final connectionTypeProvider = StreamProvider<String>((ref) async* {
   final connectivity = Connectivity();
+  
+  // Obtener el estado inicial inmediatamente
+  final initialResults = await connectivity.checkConnectivity();
+  final initialActiveConnection = initialResults.firstWhere(
+    (result) => result != ConnectivityResult.none,
+    orElse: () => ConnectivityResult.none,
+  );
+  yield _getConnectionDescription(initialActiveConnection);
+  
+  // Luego escuchar cambios
   await for (final results in connectivity.onConnectivityChanged) {
     final activeConnection = results.firstWhere(
       (result) => result != ConnectivityResult.none,

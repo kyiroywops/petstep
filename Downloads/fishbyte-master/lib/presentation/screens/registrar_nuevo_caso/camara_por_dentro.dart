@@ -92,8 +92,8 @@ class _FishPhotoSessionFullScreenState extends ConsumerState<FishPhotoSessionFul
     if (_controller.value.isInitialized) {
       _controller.dispose();
     }
-    // Restaurar orientaciones permitidas
-    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+    // No restauramos orientaciones aquí para evitar que se dé vuelta
+    // cuando navega a otras pantallas horizontales
     super.dispose();
   }
 

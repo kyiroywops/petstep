@@ -9,8 +9,191 @@ class AuthRepository {
 
   AuthRepository(this._supabase);
 
-  // Método para iniciar sesión con Google
-  Future<Map<String, dynamic>> loginWithGoogle() async {
+  // Método para obtener todas las empresas disponibles
+  // Nota: Se obtienen todas las empresas porque el filtrado se hace en el momento del login
+  Future<List<Map<String, dynamic>>> getAllEnterprises() async {
+    try {
+      print("🔍 Obteniendo todas las empresas disponibles...");
+      
+      final response = await _supabase
+          .from('enterprises')
+          .select('id, name, nickname')
+          .order('name');
+      
+      print("✅ Empresas obtenidas: ${response.length}");
+      for (final enterprise in response) {
+        print("  - ${enterprise['name']} (${enterprise['id']})");
+      }
+      
+      return List<Map<String, dynamic>>.from(response);
+    } catch (e) {
+      print("❌ Error obteniendo empresas: $e");
+      throw Exception("Error al obtener las empresas: $e");
+    }
+  }
+
+  // Método para obtener solo las empresas a las que un usuario específico tiene acceso
+  Future<List<Map<String, dynamic>>> getEnterprisesForUser(String userEmail) async {
+    try {
+      print("🔍 Obteniendo empresas para usuario: $userEmail");
+      
+      // Obtener información del usuario para ver sus empresas
+      final userResponse = await _supabase
+          .from('users')
+          .select('enterprises_id, enterprise_id')
+          .eq('email', userEmail)
+          .maybeSingle();
+      
+      print("👤 Datos del usuario: $userResponse");
+      
+      if (userResponse == null) {
+        print("❌ Usuario no encontrado");
+        return [];
+      }
+      
+      // Obtener IDs de empresas del usuario
+      Set<String> userEnterpriseIds = {};
+      
+      // Agregar enterprise_id si existe
+      if (userResponse['enterprise_id'] != null) {
+        userEnterpriseIds.add(userResponse['enterprise_id'].toString());
+        print("✅ Agregando enterprise_id: ${userResponse['enterprise_id']}");
+      }
+      
+      // Agregar enterprises_id si existe (array)
+      if (userResponse['enterprises_id'] != null) {
+        final enterprisesArray = userResponse['enterprises_id'] as List<dynamic>;
+        for (final id in enterprisesArray) {
+          userEnterpriseIds.add(id.toString());
+          print("✅ Agregando enterprises_id: $id");
+        }
+      }
+      
+      if (userEnterpriseIds.isEmpty) {
+        print("❌ Usuario no tiene empresas asignadas");
+        return [];
+      }
+      
+      print("🏢 Total de empresas del usuario: ${userEnterpriseIds.length}");
+      print("🏢 IDs de empresas: $userEnterpriseIds");
+      
+      // Obtener información de las empresas a las que tiene acceso
+      final response = await _supabase
+          .from('enterprises')
+          .select('id, name, nickname')
+          .inFilter('id', userEnterpriseIds.toList())
+          .order('name');
+      
+      print("✅ Empresas obtenidas para usuario: ${response.length}");
+      for (final enterprise in response) {
+        print("  - ${enterprise['name']} (${enterprise['id']})");
+      }
+      
+      return List<Map<String, dynamic>>.from(response);
+    } catch (e) {
+      print("❌ Error obteniendo empresas para usuario: $e");
+      throw Exception("Error al obtener las empresas: $e");
+    }
+  }
+
+  // Método para verificar si un usuario tiene acceso a una empresa específica
+  Future<bool> userHasAccessToEnterprise(String userEmail, String enterpriseId) async {
+    try {
+      print("🔍 Verificando acceso para usuario: $userEmail, empresa: $enterpriseId");
+      
+      // Primero verificar si el usuario existe en la base de datos
+      final userResponse = await _supabase
+          .from('users')
+          .select('user_id, enterprise_id, enterprises_id')
+          .eq('email', userEmail)
+          .maybeSingle();
+      
+      print("👤 Respuesta usuario: $userResponse");
+      
+      if (userResponse == null) {
+        print("❌ Usuario no encontrado en la base de datos");
+        return false;
+      }
+      
+      final userId = userResponse['user_id'];
+      print("✅ Usuario encontrado: $userId");
+      
+      // Verificar si el usuario tiene enterprise_id directamente en la tabla users
+      if (userResponse['enterprise_id'] != null) {
+        final userEnterpriseId = userResponse['enterprise_id'].toString();
+        print("🏢 Usuario tiene enterprise_id directo: $userEnterpriseId");
+        if (userEnterpriseId == enterpriseId) {
+          print("✅ Acceso concedido por enterprise_id directo");
+          return true;
+        }
+      }
+      
+      // También verificar enterprises_id (array de empresas)
+      if (userResponse['enterprises_id'] != null) {
+        try {
+          final enterprisesArray = userResponse['enterprises_id'] as List<dynamic>;
+          print("🏢 Usuario tiene enterprises_id (array): $enterprisesArray");
+          
+          // Verificar si la empresa seleccionada está en el array
+          for (final id in enterprisesArray) {
+            if (id.toString() == enterpriseId) {
+              print("✅ Acceso concedido por enterprises_id (encontrado en array)");
+              return true;
+            }
+          }
+          print("❌ Empresa $enterpriseId no encontrada en el array enterprises_id");
+        } catch (e) {
+          print("⚠️ Error procesando enterprises_id como array: $e");
+          // Fallback: intentar como string
+          final userEnterpriseId = userResponse['enterprises_id'].toString();
+          print("🏢 Usuario tiene enterprises_id (string): $userEnterpriseId");
+          if (userEnterpriseId == enterpriseId) {
+            print("✅ Acceso concedido por enterprises_id (string)");
+            return true;
+          }
+        }
+      }
+      
+      // Intentar verificar con función RPC si existe
+      try {
+        print("🔄 Intentando usar función RPC get_user_enterprise_id...");
+        final rpcResult = await _supabase.rpc('get_user_enterprise_id');
+        print("📞 Resultado RPC: $rpcResult");
+        
+        if (rpcResult != null && rpcResult.toString() == enterpriseId) {
+          print("✅ Acceso concedido por RPC");
+          return true;
+        }
+      } catch (rpcError) {
+        print("⚠️ RPC no disponible: $rpcError");
+      }
+      
+      // Como último recurso, intentar con users_enterprises si existe
+      try {
+        print("🔄 Intentando consulta en users_enterprises...");
+        final userEnterpriseResponse = await _supabase
+            .from('users_enterprises')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('enterprise_id', enterpriseId)
+            .maybeSingle();
+        
+        print("🔗 Respuesta users_enterprises: $userEnterpriseResponse");
+        return userEnterpriseResponse != null;
+      } catch (tableError) {
+        print("⚠️ Tabla users_enterprises no existe: $tableError");
+      }
+      
+      print("❌ No se pudo verificar acceso - denegado por defecto");
+      return false;
+    } catch (e) {
+      print("❌ Error verificando acceso a empresa: $e");
+      return false;
+    }
+  }
+
+  // Método para iniciar sesión con Google y empresa específica
+  Future<Map<String, dynamic>> loginWithGoogle(String enterpriseId) async {
     try {
       // La autenticación con Google en Supabase se maneja directamente en la UI
       // Este método solo se encarga de procesar los datos de usuario después del inicio de sesión
@@ -49,42 +232,50 @@ class AuthRepository {
           .eq('user_id', userId)
           .single();
       
-      // Obtener datos de la empresa asociada al usuario
-      final enterpriseId = userData['enterprise_id'];
+      // Usar la empresa específica seleccionada en el login
       Map<String, dynamic>? enterpriseData;
       List<dynamic>? centersData;
       
-      if (enterpriseId != null) {
-        // Obtener empresa
-        enterpriseData = await _supabase
-            .from('enterprises')
-            .select('*')
-            .eq('id', enterpriseId)
-            .single();
+      // Verificar que el usuario tenga acceso a la empresa seleccionada
+      print("🔐 Verificando acceso del usuario ${session.user.email} a la empresa $enterpriseId");
+      final hasAccess = await userHasAccessToEnterprise(session.user.email!, enterpriseId);
+      print("🔐 Resultado de verificación de acceso: $hasAccess");
+      
+      if (!hasAccess) {
+        throw Exception("No tienes acceso a esta empresa");
+      }
+      
+      print("✅ Acceso verificado correctamente, continuando con el login...");
+      
+      // Obtener empresa
+      enterpriseData = await _supabase
+          .from('enterprises')
+          .select('*')
+          .eq('id', enterpriseId)
+          .single();
             
-        // Obtener centros
-        centersData = await _supabase
-            .from('centers')
-            .select('*')
-            .eq('enterprise_id', enterpriseId)
-            .order('name');
-            
-        // Cargar jaulas para cada centro
-        if (centersData != null && centersData.isNotEmpty) {
-          // Para cada centro, consultamos sus jaulas
-          for (var i = 0; i < centersData.length; i++) {
-            final centerId = centersData[i]['id'];
-            
-            // Consultar jaulas para este centro
-            final cagesData = await _supabase
-                .from('cages')
-                .select('*')
-                .eq('center_id', centerId)
-                .order('name');
-                
-            // Añadir las jaulas al objeto de centro
-            centersData[i]['cages'] = cagesData;
-          }
+      // Obtener centros
+      centersData = await _supabase
+          .from('centers')
+          .select('*')
+          .eq('enterprise_id', enterpriseId)
+          .order('name');
+          
+      // Cargar jaulas para cada centro
+      if (centersData != null && centersData.isNotEmpty) {
+        // Para cada centro, consultamos sus jaulas
+        for (var i = 0; i < centersData.length; i++) {
+          final centerId = centersData[i]['id'];
+          
+          // Consultar jaulas para este centro
+          final cagesData = await _supabase
+              .from('cages')
+              .select('*')
+              .eq('center_id', centerId)
+              .order('name');
+              
+          // Añadir las jaulas al objeto de centro
+          centersData[i]['cages'] = cagesData;
         }
       }
       

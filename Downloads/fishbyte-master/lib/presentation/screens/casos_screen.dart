@@ -117,7 +117,7 @@ class _FishPhotoSessionSetupScreenState
                     ),
                   ),
 
-                  // 5) Sección: “Registros enviados recientemente”
+                  // 5) Sección: "Registros enviados recientemente"
                   const SliverToBoxAdapter(child: SizedBox(height: 10)),
                   const SliverToBoxAdapter(
                     child: Padding(
@@ -128,7 +128,7 @@ class _FishPhotoSessionSetupScreenState
                     ),
                   ),
 
-                  // 6) Sección: “Registros no enviados”
+                  // 6) Sección: "Registros no enviados"
                   const SliverToBoxAdapter(child: SizedBox(height: 10)),
                   const SliverToBoxAdapter(
                     child: Padding(
@@ -155,7 +155,7 @@ class _FishPhotoSessionSetupScreenState
                   HapticFeedback.lightImpact();
                   // Redireccionar a la pantalla de selección de centros
                   ref.read(photoSessionProvider.notifier).reset();
-                  context.go('/centerselection');
+                  context.go('/splash-orientation');
                 },
                 child: Container(
                   width: double.infinity,
