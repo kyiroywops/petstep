@@ -64,14 +64,20 @@ class LoginController extends StateNotifier<AsyncValue<void>> {
   // Método para iniciar sesión con Google y empresa específica
   // Este método se llama desde la pantalla de login
   Future<void> signInWithGoogle(String enterpriseId) async {
+    print("==== FISHBYTE DEBUG INICIO ====");
+    print("Método signInWithGoogle llamado");
+    print("Empresa ID: $enterpriseId");
+    print("Platform.isAndroid: ${Platform.isAndroid}");
+    print("kGoogleWebClientId: $kGoogleWebClientId");
+    print("================================");
+    
     try {
       state = const AsyncValue.loading();
       
       // Guardar la empresa seleccionada
       _selectedEnterpriseId = enterpriseId;
       
-      debugPrint("Iniciando proceso de autenticación nativa con Google para empresa: $enterpriseId");
-      
+      print("Configurando GoogleSignIn...");
       // Inicializar GoogleSignIn con los IDs de cliente configurados
       final GoogleSignIn googleSignIn = GoogleSignIn(
         // En iOS utilizamos el kGoogleIOSClientId específico
@@ -79,32 +85,46 @@ class LoginController extends StateNotifier<AsyncValue<void>> {
         serverClientId: kGoogleWebClientId,
       );
       
+      print("GoogleSignIn configurado correctamente");
+      
+      debugPrint("🔧 GoogleSignIn configurado:");
+      debugPrint("   - clientId: ${!kIsWeb && Platform.isIOS ? kGoogleIOSClientId : 'null (Android usa google-services.json)'}");
+      debugPrint("   - serverClientId: $kGoogleWebClientId");
+      
       // Iniciar el flujo de autenticación con Google
+      print("INICIANDO googleSignIn.signIn()...");
       final googleUser = await googleSignIn.signIn();
       
       if (googleUser == null) {
+        debugPrint("❌ Usuario canceló el proceso de sign-in");
         throw Exception("Proceso de inicio de sesión con Google cancelado");
       }
       
+      debugPrint("✅ GoogleUser obtenido:");
+      debugPrint("   - email: ${googleUser.email}");
+      debugPrint("   - displayName: ${googleUser.displayName}");
+      debugPrint("   - id: ${googleUser.id}");
+      
       // Obtener los tokens de autenticación
+      debugPrint("🔑 Obteniendo tokens de autenticación...");
       final googleAuth = await googleUser.authentication;
-      final accessToken = googleAuth.accessToken;
       final idToken = googleAuth.idToken;
       
-      if (accessToken == null) {
-        throw Exception("No se obtuvo el token de acceso de Google");
-      }
+      debugPrint("🔑 Token obtenido:");
+      debugPrint("   - idToken: ${idToken?.substring(0, 20)}...");
+      
       if (idToken == null) {
+        debugPrint("❌ No se obtuvo idToken");
         throw Exception("No se obtuvo el token de ID de Google");
       }
       
-      debugPrint("Tokens de Google obtenidos correctamente");
+      debugPrint("✅ Token obtenido correctamente");
       
       // Iniciar sesión en Supabase con el token de ID de Google
+      // En las versiones nuevas de google_sign_in, ya no necesitamos accessToken
       await _supabase.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
-        accessToken: accessToken,
       );
       
       debugPrint("Proceso de autenticación con Google completado con éxito");

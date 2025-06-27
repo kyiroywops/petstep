@@ -1,7 +1,7 @@
 name: fishbyte
 description: "Fishbyte App."
 publish_to: 'none'
-version: 2.1.3+10
+version: 2.1.6+13
 
 environment:
   sdk: ^3.5.4

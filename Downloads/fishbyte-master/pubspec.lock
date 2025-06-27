@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: e55636ed79578b9abca5fecf9437947798f5ef7456308b5cb85720b793eac92f
+      sha256: da0d9209ca76bde579f2da330aeb9df62b6319c834fa7baae052021b0462401f
       url: "https://pub.dev"
     source: hosted
-    version: "82.0.0"
+    version: "85.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "904ae5bb474d32c38fb9482e2d925d5454cda04ddd0e55d2e6826bc72f6ba8c0"
+      sha256: f6154230675c44a191f2e20d16eeceb4aa18b30ca732db4efaf94c6a7d43cfa6
       url: "https://pub.dev"
     source: hosted
-    version: "7.4.5"
+    version: "7.5.2"
   ansicolor:
     dependency: transitive
     description:
@@ -101,10 +101,10 @@ packages:
     dependency: transitive
     description:
       name: build
-      sha256: "486337d40a48d75049f2a01efceefc1412e3a6d6342d39624753e7d5a4e70016"
+      sha256: "51dc711996cbf609b90cbe5b335bbce83143875a9d58e4b5c6d3c4f684d3dda7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1"
+    version: "2.5.4"
   build_config:
     dependency: transitive
     description:
@@ -125,26 +125,26 @@ packages:
     dependency: transitive
     description:
       name: build_resolvers
-      sha256: abe6e4b5b36ce2bf01aec8f2a59424d1ecfc3cb340e7145a64359adc7233a0d1
+      sha256: ee4257b3f20c0c90e72ed2b57ad637f694ccba48839a821e87db762548c22a62
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1"
+    version: "2.5.4"
   build_runner:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: "398ec7898b9b60be126067835a8202240b26dc54aa34d91d0198a539dcd5942e"
+      sha256: "382a4d649addbfb7ba71a3631df0ec6a45d5ab9b098638144faf27f02778eb53"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1"
+    version: "2.5.4"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
-      sha256: "9821dbf604ed74a6dabeaba0c33ac58190332ea238862a62cdf25fc8eba226b8"
+      sha256: "85fbbb1036d576d966332a3f5ce83f2ce66a40bea1a94ad2d5fc29a19a0d3792"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.1"
+    version: "9.1.2"
   built_collection:
     dependency: transitive
     description:
@@ -181,10 +181,10 @@ packages:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: "25837fd84038c9023213d83bed4466b90b96868df2077185fb47048b82dfb917"
+      sha256: "71dacf6c30aee386617c2b72ad46517706f8ef625aa637313c0d4dc93ddd8d76"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.19+3"
+    version: "0.9.20+1"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -506,10 +506,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: b94a50aabbe56ef254f95f3be75640f99120429f0a153b2dc30143cffc9bfdf3
+      sha256: edae0c34573233ab03f5ba1f07465e55c384743893042cb19e010b4ee8541c12
       url: "https://pub.dev"
     source: hosted
-    version: "19.2.1"
+    version: "19.3.0"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
@@ -522,10 +522,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
-      sha256: "2569b973fc9d1f63a37410a9f7c1c552081226c597190cb359ef5d5762d1631c"
+      sha256: "277d25d960c15674ce78ca97f57d0bae2ee401c844b6ac80fcd972a9c99d09fe"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.0"
+    version: "9.1.0"
   flutter_local_notifications_windows:
     dependency: transitive
     description:
@@ -612,10 +612,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: f222e12c5360b0c90aae5d33e6b351a6789d4aa1c97b32691b4a30946fc91813
+      sha256: ac294be30ba841830cfa146e5a3b22bb09f8dc5a0fdd9ca9332b04b0bde99ebf
       url: "https://pub.dev"
     source: hosted
-    version: "15.2.0"
+    version: "15.2.4"
   google_fonts:
     dependency: "direct main"
     description:
@@ -1276,18 +1276,18 @@ packages:
     dependency: transitive
     description:
       name: sentry
-      sha256: ed887adfe4fc1c2a4e512bb5cd5607d4c0192a4ec669df5a29b4f1037a346190
+      sha256: "4aee18ffcdb6d92db3a770764fd0034b93f27ae736cf9f39855575a36c04fe91"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.0"
+    version: "9.1.0"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
-      sha256: "964b8ccf6568dab01737ad8216f97deac777c8e6fe6006f7c2d6592ec2170a48"
+      sha256: e5c36f0715d181788be46bf56908322a1f8a8ca62830dc78ef3c523af3af5075
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.0"
+    version: "9.1.0"
   shared_preferences:
     dependency: "direct main"
     description:
